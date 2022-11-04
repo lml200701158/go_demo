@@ -14,11 +14,12 @@ type Counter struct {
 func (l *Counter) Allow() bool {
 	l.lock.Lock()
 	defer l.lock.Unlock()
-	if l.count == l.rate-1 {
+	if l.count == l.rate {
 		now := time.Now()
 		if now.Sub(l.begin) >= l.cycle {
 			//速度允许范围内， 重置计数器
 			l.Reset(now)
+			l.count++
 			return true
 		} else {
 			return false
